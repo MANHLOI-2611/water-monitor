@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Water Monitor - Giám sát mực nước</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+    <!-- THANH TIEU DE -->
+    <header class="header">
+        <h1>WATER MONITOR</h1>
+        <p>Hệ thống giám sát mực nước và cảnh báo sạt lở</p>
+    </header>
+
+    <!-- NOI DUNG CHINH -->
+    <main class="container">
+
+        <h2 class="section-title">Tổng quan hệ thống</h2>
+
+        <!-- CAC THE THONG SO -->
+        <div class="dashboard">
+
+            <div class="card">
+                <h3>MỰC NƯỚC HIỆN TẠI</h3>
+                <div class="value">0%</div>
+                <p class="description">Mức nước so với ngưỡng tối đa</p>
+            </div>
+
+            <div class="card">
+                <h3>TRẠNG THÁI NGẬP LỤT</h3>
+                <div class="value status-safe">AN TOÀN</div>
+                <p class="description">Chưa phát hiện nguy cơ ngập lụt</p>
+            </div>
+
+            <div class="card">
+                <h3>TRẠNG THÁI SẠT LỞ</h3>
+                <div class="value status-safe">AN TOÀN</div>
+                <p class="description">Độ nghiêng trong giới hạn cho phép</p>
+            </div>
+
+        </div>
+
+        <!-- TRANG THAI KET NOI -->
+        <h2 class="section-title" style="margin-top: 35px;">
+            Trạng thái thiết bị
+        </h2>
+
+        <div class="dashboard">
+
+            <div class="card">
+                <h3>ESP32</h3>
+                <div class="value status-safe">ĐANG HOẠT ĐỘNG</div>
+                <p class="description">Thiết bị giám sát trung tâm</p>
+            </div>
+
+            <div class="card">
+                <h3>CẢM BIẾN MỰC NƯỚC</h3>
+                <div class="value status-safe">HOẠT ĐỘNG</div>
+                <p class="description">Cảm biến HC-SR04</p>
+            </div>
+
+            <div class="card">
+                <h3>CẢM BIẾN GÓC NGHIÊNG</h3>
+                <div class="value status-safe">HOẠT ĐỘNG</div>
+                <p class="description">Cảm biến MPU6050</p>
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
+</html>
