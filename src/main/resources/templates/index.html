@@ -74,23 +74,34 @@
         </div>
 
     </main>
+
 <section class="history-section">
-    <h2>Lịch sử cảnh báo</h2>
+    <div class="history-heading">
+        <div>
+            <h2>Lịch sử cảnh báo</h2>
+            <p>Theo dõi các lần thay đổi trạng thái của hệ thống</p>
+        </div>
+        <span class="history-label">HISTORY</span>
+    </div>
 
-    <table class="history-table">
-        <thead>
-            <tr>
-                <th>Ngày giờ</th>
-                <th>Trạng thái</th>
-            </tr>
-        </thead>
+    <div class="history-table-wrapper">
+        <table class="history-table">
+            <thead>
+                <tr>
+                    <th>Ngày giờ</th>
+                    <th>Trạng thái cảnh báo</th>
+                </tr>
+            </thead>
 
-        <tbody id="historyBody">
-            <tr>
-                <td colspan="2">Đang tải lịch sử...</td>
-            </tr>
-        </tbody>
-    </table>
+            <tbody id="historyBody">
+                <tr>
+                    <td colspan="2" class="history-empty">
+                        Đang tải lịch sử...
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </section>
 
 <script>
@@ -103,8 +114,12 @@ async function loadHistory() {
         tbody.innerHTML = '';
 
         if (history.length === 0) {
-            tbody.innerHTML =
-                '<tr><td colspan="2">Chưa có lịch sử</td></tr>';
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="2" class="history-empty">
+                        Chưa có dữ liệu cảnh báo
+                    </td>
+                </tr>`;
             return;
         }
 
@@ -113,12 +128,20 @@ async function loadHistory() {
 
             const timeCell = document.createElement('td');
             timeCell.textContent = event.time;
+            timeCell.className = 'history-time';
 
             const statusCell = document.createElement('td');
-            statusCell.textContent = event.message;
+
+            const badge = document.createElement('span');
+            badge.className = 'status-badge status-' +
+                event.status.toLowerCase();
+            badge.textContent = event.message;
+
+            statusCell.appendChild(badge);
 
             row.appendChild(timeCell);
             row.appendChild(statusCell);
+
             tbody.appendChild(row);
         });
 
