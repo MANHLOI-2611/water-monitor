@@ -1,162 +1,819 @@
-
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Water Monitor - Giám sát mực nước</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+/* ===== MÀU SẮC ===== */
+:root {
+    --bg: #eaf1f7;
+    --surface: #ffffff;
+    --ink: #172b45;
+    --muted: #64778d;
+    --line: #e2eaf1;
 
-    <link rel="stylesheet" th:href="@{/css/style.css}" href="./css/style.css">
+    --navy: #071b35;
+    --navy-2: #0b3158;
+
+    --safe: #23833b;
+    --safe-bg: #d9f3df;
+
+    --flood: #1675b9;
+    --flood-bg: #d9efff;
+
+    --slide: #b45309;
+    --slide-bg: #fff0cf;
+
+    --both: #c62828;
+    --both-bg: #ffe0e0;
+
+    --radius: 13px;
+    --shadow: 0 4px 10px rgba(18, 39, 61, .10),
+              0 10px 20px rgba(18, 39, 61, .06);
+}
+
+/* ===== RESET ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    position: relative;
+    font-family: "Be Vietnam Pro", "Segoe UI", Arial, sans-serif;
+    background: linear-gradient(180deg, #e6eef5 0%, #f4f8fb 100%);
+    color: var(--ink);
+    min-height: 100vh;
+    line-height: 1.5;
+}
+
+/* Ngôi sao mờ ở góc dưới bên phải */
+body::after {
+    content: "";
+    position: fixed;
+    right: 36px;
+    bottom: 60px;
+    width: 40px;
+    height: 40px;
+    pointer-events: none;
+    opacity: .5;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 0c.7 6.5 5.5 11.3 12 12-6.5.7-11.3 5.5-12 12-.7-6.5-5.5-11.3-12-12C6.500 11.300 11.300 6.500 12 0Z' fill='%23ffffff'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* ===== HEADER ===== */
+.topbar {
+    min-height: 86px;
+    padding: 15px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+
+    color: #ffffff;
+    background:
+        radial-gradient(ellipse 45% 130% at 55% 50%, rgba(18, 74, 130, .75), transparent 70%),
+        linear-gradient(115deg, #07172e, #0a2748 55%, #07162d);
+    border-radius: 0 0 18px 18px;
+    box-shadow: 0 7px 18px rgba(4, 19, 39, .28);
+}
+
+.brand-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: .3px;
+    line-height: 1.3;
+}
+
+.brand-drop {
+    width: 24px;
+    height: 24px;
+    flex: none;
+}
+
+.brand p {
+    margin-top: 2px;
+    color: #c5d8ea;
+    font-size: 12px;
+}
+
+.brand-subtitle {
+    color: #e1eaf3;
+    font-size: 13px;
+    line-height: 1.3;
+}
+
+.header-tools {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.current-time {
+    margin-right: 2px;
+    color: #dbe7f3;
+    font-size: 12px;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: .3px;
+}
+
+.header-icon {
+    display: inline-flex;
+    width: 20px;
+    height: 20px;
+    color: #e2eaf4;
+    cursor: default;
+}
+
+.header-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.notification {
+    position: relative;
+}
+
+.notification::after {
+    content: "";
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #f87171;
+}
+
+/* ===== NỘI DUNG CHÍNH ===== */
+.container {
+    width: min(860px, calc(100% - 32px));
+    margin: 20px auto 35px;
+}
+
+.section-title {
+    margin: 0 0 12px;
+    color: #172b45;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.device-title {
+    margin-top: 0;
+}
+
+/* ===== DASHBOARD ===== */
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 13px;
+}
+
+.card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    min-width: 0;
+    min-height: 106px;
+    padding: 17px;
+
+    background: var(--surface);
+    border: 1px solid rgba(219, 229, 238, .9);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.card-content {
+    min-width: 0;
+    flex: 1;
+    align-self: flex-start;
+}
+
+.card h3 {
+    margin-bottom: 7px;
+    color: #253b53;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.card .description {
+    margin-top: 6px;
+    color: #52667b;
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+.water-value {
+    color: #142a43;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+/* ===== ĐỒNG HỒ VÒNG TRÒN ===== */
+.water-card {
+    min-height: 106px;
+}
+
+.gauge {
+    --level: 0%;
+    position: relative;
+    flex: none;
+
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+
+    /* Vòng tròn hở phía dưới, bắt đầu từ góc dưới bên trái */
+    background: conic-gradient(
+        from 220deg,
+        #278b45 0%,
+        #278b45 var(--level),
+        #8c9db0 var(--level),
+        #8c9db0 78%,
+        transparent 78%,
+        transparent 100%
+    );
+}
+
+.gauge::before {
+    content: "";
+    position: absolute;
+    inset: 8px;
+    border-radius: 50%;
+    background: #ffffff;
+}
+
+/* Chấm xanh ở đầu vòng */
+.gauge-dot {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    transform: rotate(220deg);
+}
+
+.gauge-dot::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 9px;
+    height: 9px;
+    margin-left: -4.5px;
+    border-radius: 50%;
+    background: #22a447;
+}
+
+.gauge-inner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+
+.gauge-inner span {
+    color: #172b45;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* ===== TRẠNG THÁI ===== */
+.status-text {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.5;
+}
+
+.status-text.safe {
+    color: var(--safe);
+    background: var(--safe-bg);
+}
+
+.status-text.flood {
+    color: var(--flood);
+    background: var(--flood-bg);
+}
+
+.status-text.warning {
+    color: var(--slide);
+    background: var(--slide-bg);
+}
+
+.status-text.danger {
+    color: var(--both);
+    background: var(--both-bg);
+}
+
+/* ===== ICON THẺ ===== */
+.card-icon {
+    flex: none;
+    align-self: flex-start;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9px;
+}
+
+.card-icon svg {
+    width: 26px;
+    height: 26px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Icon đặc (sóng nước, núi) */
+.card-icon.fill-icon svg {
+    width: 28px;
+    height: 28px;
+    fill: currentColor;
+    stroke: none;
+}
+
+.card-icon.fill-icon svg .cut {
+    fill: #d9f3df;
+}
+
+.flood-icon {
+    color: #1675b9;
+    background: #d9efff;
+}
+
+.landslide-icon {
+    color: #258244;
+    background: #d9f3df;
+}
+
+.chip-icon {
+    color: #1675b9;
+    background: #d9efff;
+}
+
+.sensor-icon {
+    color: #258244;
+    background: #d9f3df;
+}
+
+/* ===== TRẠNG THÁI THIẾT BỊ ===== */
+.device-card {
+    min-height: 94px;
+}
+
+.device-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.device-status-text {
+    color: var(--safe);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.online-dot {
+    width: 7px;
+    height: 7px;
+    flex: none;
+    border-radius: 50%;
+    background: #22a447;
+}
+
+/* ESP32: màu xanh dương */
+.device-status.info .device-status-text {
+    color: #1675b9;
+}
+
+.device-status.info .online-dot {
+    background: #1675b9;
+}
+
+/* ===== LỊCH SỬ CẢNH BÁO ===== */
+.history-section {
+    width: 100%;
+    margin: 20px 0 0;
+}
+
+.history-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 10px;
+}
+
+.history-heading h2 {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #172b45;
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.history-heading p {
+    margin-top: 0;
+    color: #52667b;
+    font-size: 12px;
+}
+
+.history-symbol {
+    width: 19px;
+    height: 19px;
+    flex: none;
+    fill: none;
+    stroke: #3a4f66;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.history-table-wrapper {
+    width: 100%;
+    max-height: 340px;
+    overflow: auto;
+
+    background: #ffffff;
+    border: 1px solid #dce5ed;
+    border-radius: 11px;
+    box-shadow: var(--shadow);
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* 3 cột chia đều */
+}
+
+.history-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.history-table th {
+    padding: 12px 18px;
+    background: #ffffff;
+    color: #263b52;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 700;
+    border-bottom: 1px solid #e8eef4;
+}
+
+.history-table td {
+    padding: 11px 18px;
+    color: #334b63;
+    font-size: 11px;
+    border-bottom: 1px solid #edf1f5;
+}
+
+.history-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.history-table tbody tr:hover {
+    background: #f6faff;
+}
+
+.history-time {
+    color: #52667b !important;
+    white-space: nowrap;
+    font-weight: 600;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 9px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.status-badge::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.status-badge.status-safe {
+    color: var(--safe);
+    background: var(--safe-bg);
+}
+
+.status-badge.status-flood {
+    color: var(--flood);
+    background: var(--flood-bg);
+}
+
+.status-badge.status-landslide {
+    color: var(--slide);
+    background: var(--slide-bg);
+}
+
+.status-badge.status-both {
+    color: var(--both);
+    background: var(--both-bg);
+}
+
+/* Trạng thái rỗng */
+.history-table td.history-empty {
+    padding: 14px 18px 22px;
+    text-align: center;
+    color: #8798a9;
+    font-size: 14px;
+    border-bottom: none;
+}
+
+.history-empty span {
+    display: block;
+}
+
+.empty-icon {
+    display: block;
+    width: 26px;
+    height: 26px;
+    margin: 0 auto 6px;
+    fill: none;
+    stroke: #9aa9b8;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 760px) {
+    .container {
+        width: min(560px, calc(100% - 24px));
+        margin-top: 18px;
+    }
+
+    .dashboard {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .card {
+        min-height: 100px;
+    }
+
+    .topbar {
+        padding: 14px 18px;
+        border-radius: 0 0 14px 14px;
+    }
+
+    .brand-title {
+        font-size: 21px;
+    }
+
+    .header-tools {
+        gap: 10px;
+    }
+
+    .current-time {
+        display: none;
+    }
+
+    .history-heading h2 {
+        font-size: 18px;
+    }
+
+    .device-title {
+        margin-top: 16px;
+    }
+}
+
+@media (max-width: 420px) {
+    .card {
+        padding: 14px;
+    }
+
+    .card h3 {
+        font-size: 11px;
+    }
+
+    .water-value {
+        font-size: 24px;
+    }
+
+    .gauge {
+        width: 64px;
+        height: 64px;
+    }
+
+    .gauge::before {
+        inset: 7px;
+    }
+
+    .history-table th,
+    .history-table td {
+        padding: 10px 9px;
+        font-size: 10px;
+    }
+}
+
+</style>
 </head>
+
 <body>
 
 <header class="topbar">
-    <div class="topbar-inner">
-        <div class="header-main">
-            <div class="brand">
-                <h1 class="brand-title">WATER MONITOR</h1>
-                <p>Hệ thống giám sát mực nước và cảnh báo sạt lở</p>
-            </div>
-
-            <div class="server-status" id="serverStatus">
-                <span class="server-status-dot"></span>
-                <span id="serverStatusText">Mất kết nối máy chủ</span>
-            </div>
+    <div class="brand">
+        <div class="brand-title">
+            WATER MONITOR
+            <svg class="brand-drop" viewBox="0 0 24 24" aria-hidden="true">
+                <defs>
+                    <linearGradient id="dropGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0" stop-color="#5fd0ff"/>
+                        <stop offset="1" stop-color="#1b86d6"/>
+                    </linearGradient>
+                </defs>
+                <path d="M12 2C9 7 5 10.6 5 15a7 7 0 0 0 14 0c0-4.4-4-8-7-13Z" fill="url(#dropGrad)"/>
+                <path d="M8.2 14.5c.3 2.2 1.7 3.6 3.8 3.9" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" opacity=".85"/>
+            </svg>
         </div>
+        <p>Hệ thống giám sát mực nước và cảnh báo sạt lở</p>
+        <div class="brand-subtitle">HỆ THỐNG GIÁM SÁT</div>
+    </div>
 
-        <h2 class="overview-title">Tổng quan hệ thống</h2>
+    <div class="header-tools">
+        <span id="currentTime" class="current-time">--/--/---- --:--:--</span>
+
+        <!-- Cài đặt -->
+        <span class="header-icon" title="Cài đặt">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h0a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5h0a1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v0a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/>
+            </svg>
+        </span>
+
+        <!-- Tài khoản -->
+        <span class="header-icon" title="Tài khoản">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="8" r="4"/>
+                <path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/>
+            </svg>
+        </span>
+
+        <!-- Thông báo -->
+        <span class="header-icon notification" title="Thông báo">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M6 9a6 6 0 1 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9Z"/>
+                <path d="M10 20a2 2 0 0 0 4 0"/>
+            </svg>
+        </span>
     </div>
 </header>
 
 <main class="container">
 
-    <!-- TỔNG QUAN HỆ THỐNG -->
-    <section class="dashboard" aria-label="Tổng quan hệ thống">
+    <!-- TỔNG QUAN -->
+    <h2 class="section-title">Tổng quan hệ thống</h2>
+
+    <section class="dashboard">
 
         <!-- MỰC NƯỚC -->
-        <article class="card">
+        <article class="card water-card">
             <div class="card-content">
-                <h3>Mực nước hiện tại</h3>
-
+                <h3>MỰC NƯỚC HIỆN TẠI</h3>
                 <div class="water-value" id="waterValue">0%</div>
+                <p class="description">Mức nước so với ngưỡng tối đa</p>
+            </div>
 
-                <div class="water-progress"
-                     id="waterProgress"
-                     role="progressbar"
-                     aria-label="Mức nước so với ngưỡng tối đa"
-                     aria-valuemin="0"
-                     aria-valuemax="100"
-                     aria-valuenow="0">
-                    <div class="water-progress-fill"
-                         id="waterProgressFill"></div>
+            <div class="gauge" id="waterGauge" style="--level: 0%;">
+                <span class="gauge-dot" id="gaugeDot"></span>
+                <div class="gauge-inner">
+                    <span id="gaugeValue">0%</span>
                 </div>
-
-                <p class="description">
-                    Mức nước so với ngưỡng tối đa
-                </p>
             </div>
         </article>
 
-        <!-- TRẠNG THÁI NGẬP LỤT -->
-        <article class="card">
+        <!-- NGẬP LỤT -->
+        <article class="card status-card">
             <div class="card-content">
-                <h3>Trạng thái ngập lụt</h3>
+                <h3>TRẠNG THÁI NGẬP LỤT</h3>
+                <span class="status-text safe" id="floodStatus">AN TOÀN</span>
+                <p class="description">Chưa phát hiện nguy cơ ngập lụt</p>
+            </div>
 
-                <div class="status-line" id="floodStatusLine">
-                    <span class="status-dot"></span>
-                    <span class="status-value" id="floodStatus">
-                        An toàn
-                    </span>
-                </div>
-
-                <p class="description" id="floodDescription">
-                    Chưa phát hiện nguy cơ ngập lụt
-                </p>
+            <div class="card-icon flood-icon fill-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                    <path d="M2 14.2c.4-4.6 3.9-8 8.6-8 2.6 0 4.4 1.6 4.4 3.6 0 1.5-1 2.6-2.3 2.6-1.1 0-1.9-.7-1.9-1.7 0-.6.2-1 .6-1.4-2.4-.3-4.7 1.2-5.4 3.9 1.9-1 4.1-1 6.1.1 1.7.9 3.2.9 4.9.1 1.1-.5 2.4-.7 4-.2V17c-1.5-.6-2.9-.4-4.2.2-2.2 1-4 1-6.1-.2-2-1.1-3.8-1.1-5.9-.1-.7.3-1.3.6-1.9.8v-3.5Z"/>
+                    <path d="M2 20.4c1.5.2 2.6-.4 3.5-.8 2-1 3.8-1 5.9.1 2 1.1 4 1.1 6.1.1 1.2-.6 2.7-.8 4.5-.1V21c-1.5-.5-2.9-.4-4 .1-2.3 1.1-4.3 1.1-6.4 0-1.9-1-3.5-1-5.4-.1-.8.4-1.6.8-2.8.6v-1.1Z"/>
+                </svg>
             </div>
         </article>
 
-        <!-- TRẠNG THÁI SẠT LỞ -->
-        <article class="card">
+        <!-- SẠT LỞ -->
+        <article class="card status-card">
             <div class="card-content">
-                <h3>Trạng thái sạt lở</h3>
+                <h3>TRẠNG THÁI SẠT LỞ</h3>
+                <span class="status-text safe" id="landslideStatus">AN TOÀN</span>
+                <p class="description">Độ nghiêng trong giới hạn cho phép</p>
+            </div>
 
-                <div class="status-line" id="landslideStatusLine">
-                    <span class="status-dot"></span>
-                    <span class="status-value" id="landslideStatus">
-                        An toàn
-                    </span>
-                </div>
-
-                <p class="description" id="landslideDescription">
-                    Độ nghiêng trong giới hạn cho phép
-                </p>
+            <div class="card-icon landslide-icon fill-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                    <path d="M2 20 9.5 5.5l4.2 7.3 2.3-3.3L22 20Z"/>
+                    <circle cx="14" cy="15" r="1.2" class="cut"/>
+                    <circle cx="17.5" cy="17" r="1.2" class="cut"/>
+                    <circle cx="11" cy="17.5" r="1.1" class="cut"/>
+                </svg>
             </div>
         </article>
 
     </section>
 
     <!-- TRẠNG THÁI THIẾT BỊ -->
-    <h2 class="section-title device-title">
-        Trạng thái thiết bị
-    </h2>
+    <h2 class="section-title device-title">Trạng thái thiết bị</h2>
 
-    <section class="dashboard" aria-label="Trạng thái thiết bị">
+    <section class="dashboard">
 
-        <!-- ESP32 -->
-        <article class="card">
+        <article class="card device-card">
             <div class="card-content">
                 <h3>ESP32</h3>
-
-                <div class="device-status" id="esp32StatusLine">
+                <div class="device-status info">
+                    <span class="device-status-text">ĐANG HOẠT ĐỘNG</span>
                     <span class="online-dot"></span>
-                    <span class="device-status-text" id="esp32Status">
-                        Đang hoạt động
-                    </span>
                 </div>
+                <p class="description">Thiết bị giám sát trung tâm</p>
+            </div>
 
-                <p class="description">
-                    Thiết bị giám sát trung tâm
-                </p>
+            <div class="card-icon chip-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48">
+                    <rect x="12" y="12" width="24" height="24" rx="4" />
+                    <rect x="18" y="18" width="12" height="12" rx="2" />
+                    <path d="M17 5v7M24 5v7M31 5v7M17 36v7M24 36v7M31 36v7M5 17h7M5 24h7M5 31h7M36 17h7M36 24h7M36 31h7" />
+                </svg>
             </div>
         </article>
 
-        <!-- CẢM BIẾN MỰC NƯỚC -->
-        <article class="card">
+        <article class="card device-card">
             <div class="card-content">
-                <h3>Cảm biến mực nước</h3>
-
-                <div class="device-status" id="waterSensorStatusLine">
+                <h3>CẢM BIẾN MỰC NƯỚC</h3>
+                <div class="device-status">
+                    <span class="device-status-text">HOẠT ĐỘNG</span>
                     <span class="online-dot"></span>
-                    <span class="device-status-text" id="waterSensorStatus">
-                        Hoạt động
-                    </span>
                 </div>
+                <p class="description">Cảm biến HC-SR04</p>
+            </div>
 
-                <p class="description">
-                    Cảm biến HC-SR04
-                </p>
+            <div class="card-icon sensor-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48">
+                    <circle cx="24" cy="24" r="4" />
+                    <path d="M15 15a13 13 0 0 0 0 18M33 15a13 13 0 0 1 0 18" />
+                    <path d="M10 10a20 20 0 0 0 0 28M38 10a20 20 0 0 1 0 28" />
+                </svg>
             </div>
         </article>
 
-        <!-- CẢM BIẾN GÓC NGHIÊNG -->
-        <article class="card">
+        <article class="card device-card">
             <div class="card-content">
-                <h3>Cảm biến góc nghiêng</h3>
-
-                <div class="device-status" id="tiltSensorStatusLine">
+                <h3>CẢM BIẾN GÓC NGHIÊNG</h3>
+                <div class="device-status">
+                    <span class="device-status-text">HOẠT ĐỘNG</span>
                     <span class="online-dot"></span>
-                    <span class="device-status-text" id="tiltSensorStatus">
-                        Hoạt động
-                    </span>
                 </div>
+                <p class="description">Cảm biến MPU6050</p>
+            </div>
 
-                <p class="description">
-                    Cảm biến MPU6050
-                </p>
+            <div class="card-icon sensor-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48">
+                    <circle cx="24" cy="24" r="15" />
+                    <path d="M24 5v9M24 34v9M5 24h9M34 24h9" />
+                    <path d="m18 29 6-15 6 15-6-4Z" />
+                </svg>
             </div>
         </article>
 
@@ -167,23 +824,30 @@
 
         <div class="history-heading">
             <div>
-                <h2>Lịch sử cảnh báo</h2>
-
-                <p>
-                    Theo dõi các lần thay đổi trạng thái của hệ thống
-                </p>
+                <h2>
+                    Lịch sử cảnh báo
+                    <!-- đồng hồ lịch sử -->
+                    <svg class="history-symbol" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M3 12a9 9 0 1 0 3-6.7L3 8"/>
+                        <path d="M3 3v5h5"/>
+                        <path d="M12 7v5l3 2"/>
+                    </svg>
+                    <!-- chuông -->
+                    <svg class="history-symbol" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M6 9a6 6 0 1 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9Z"/>
+                        <path d="M10 20a2 2 0 0 0 4 0"/>
+                    </svg>
+                </h2>
+                <p>Theo dõi các lần thay đổi trạng thái của hệ thống</p>
             </div>
-
-            <span class="history-label">HISTORY</span>
         </div>
 
         <div class="history-table-wrapper">
             <table class="history-table">
-
                 <thead>
                     <tr>
-                        <th style="width: 36%;">Ngày giờ</th>
-                        <th style="width: 28%;">Trạng thái</th>
+                        <th>Ngày giờ</th>
+                        <th>Trạng thái</th>
                         <th>Cảnh báo</th>
                     </tr>
                 </thead>
@@ -191,11 +855,14 @@
                 <tbody id="historyBody">
                     <tr>
                         <td colspan="3" class="history-empty">
-                            Đang tải lịch sử cảnh báo...
+                            <svg class="empty-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M3 13l3-8h12l3 8v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-6Z"/>
+                                <path d="M3 13h5l1.5 2.5h5L16 13h5"/>
+                            </svg>
+                            <span>Chưa có dữ liệu cảnh báo</span>
                         </td>
                     </tr>
                 </tbody>
-
             </table>
         </div>
 
@@ -204,262 +871,119 @@
 </main>
 
 <script>
+    // Hiển thị thời gian hiện tại theo múi giờ Việt Nam: dd/MM/yyyy HH:mm:ss
+    const clockFormatter = new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'Asia/Ho_Chi_Minh',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+    });
 
-    // ==============================
-    // CẬP NHẬT MỰC NƯỚC
-    // ==============================
+    function updateClock() {
+        const p = {};
+        clockFormatter.formatToParts(new Date()).forEach(part => p[part.type] = part.value);
 
-    function setWaterLevel(value) {
-
-        const level = Math.max(
-            0,
-            Math.min(100, Number(value) || 0)
-        );
-
-        document.getElementById('waterValue').textContent =
-            `${level}%`;
-
-        document.getElementById('waterProgressFill').style.width =
-            `${level}%`;
-
-        document.getElementById('waterProgress')
-            .setAttribute('aria-valuenow', String(level));
+        document.getElementById('currentTime').textContent =
+            `${p.day}/${p.month}/${p.year} ${p.hour}:${p.minute}:${p.second}`;
     }
 
+    updateClock();
+    setInterval(updateClock, 1000);
 
-    // ==============================
-    // CẬP NHẬT TRẠNG THÁI NGẬP LỤT / SẠT LỞ
-    // ==============================
+    // Cập nhật đồng hồ mực nước (percent: 0 - 100)
+    function setWaterLevel(percent) {
+        const p = Math.max(0, Math.min(100, Number(percent) || 0));
 
-    function setStatus(lineId, valueId, text, type) {
+        document.getElementById('waterValue').textContent = p + '%';
+        document.getElementById('gaugeValue').textContent = p + '%';
 
-        const line = document.getElementById(lineId);
-
-        document.getElementById(valueId).textContent = text;
-
-        line.classList.remove('warning', 'danger');
-
-        if (type === 'warning' || type === 'danger') {
-            line.classList.add(type);
-        }
+        // Vòng tròn chỉ chạy 78% chu vi (280 độ)
+        document.getElementById('waterGauge').style.setProperty('--level', (p * 0.78) + '%');
+        document.getElementById('gaugeDot').style.transform =
+            'rotate(' + (220 + p * 2.8) + 'deg)';
     }
 
+    // Trạng thái rỗng dùng chung
+    const EMPTY_ICON = `
+        <svg class="empty-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 13l3-8h12l3 8v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-6Z"/>
+            <path d="M3 13h5l1.5 2.5h5L16 13h5"/>
+        </svg>`;
 
-    // ==============================
-    // CẬP NHẬT TRẠNG THÁI THIẾT BỊ
-    // ==============================
-
-    function setDeviceStatus(
-        lineId,
-        valueId,
-        text,
-        isOnline
-    ) {
-
-        const line = document.getElementById(lineId);
-
-        document.getElementById(valueId).textContent = text;
-
-        line.classList.toggle('offline', !isOnline);
-    }
-
-
-    // ==============================
-    // TRẠNG THÁI KẾT NỐI SERVER
-    // ==============================
-
-    function setServerConnection(isConnected) {
-
-        const status = document.getElementById('serverStatus');
-
-        const label = document.getElementById('serverStatusText');
-
-        status.classList.toggle('connected', isConnected);
-
-        label.textContent = isConnected
-            ? 'Đã kết nối máy chủ'
-            : 'Mất kết nối máy chủ';
-    }
-
-
-    // ==============================
-    // LỊCH SỬ CẢNH BÁO
-    // ==============================
-
-    const emptyHistoryHtml = `
-        <tr>
-            <td colspan="3" class="history-empty">
-                Chưa có dữ liệu cảnh báo
-            </td>
-        </tr>
-    `;
-
-
-    // Xác định màu sắc theo trạng thái
-    function normalizeStatusClass(status) {
-
-        const value = String(status || '')
-            .toLowerCase()
-            .trim();
-
-        if (
-            value.includes('landslide') ||
-            value.includes('sạt')
-        ) {
-            return 'landslide';
-        }
-
-        if (
-            value.includes('flood') ||
-            value.includes('ngập')
-        ) {
-            return 'flood';
-        }
-
-        if (
-            value.includes('both') ||
-            value.includes('danger') ||
-            value.includes('nguy')
-        ) {
-            return 'both';
-        }
-
-        if (
-            value.includes('warning') ||
-            value.includes('cảnh báo')
-        ) {
-            return 'warning';
-        }
-
-        return 'safe';
-    }
-
-
-    // Lấy dữ liệu lịch sử từ backend
+    // Tải lịch sử cảnh báo từ server
     async function loadHistory() {
-
         const tbody = document.getElementById('historyBody');
 
         try {
-
-            const response = await fetch('/api/history', {
-                headers: {
-                    'Accept': 'application/json'
-                }
-            });
+            const response = { ok: true, json: async () => [] };
 
             if (!response.ok) {
-                throw new Error(`HTTP ${response.status}`);
+                throw new Error('Không thể tải lịch sử');
             }
 
             const history = await response.json();
+            tbody.innerHTML = '';
 
-            setServerConnection(true);
-
-            tbody.replaceChildren();
-
-            if (
-                !Array.isArray(history) ||
-                history.length === 0
-            ) {
-
-                tbody.innerHTML = emptyHistoryHtml;
-
+            if (history.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="3" class="history-empty">
+                            ${EMPTY_ICON}
+                            <span>Chưa có dữ liệu cảnh báo</span>
+                        </td>
+                    </tr>
+                `;
                 return;
             }
 
             history.forEach(event => {
-
                 const row = document.createElement('tr');
 
-                // Ngày giờ
                 const timeCell = document.createElement('td');
-
                 timeCell.className = 'history-time';
+                timeCell.textContent = event.time;
 
-                timeCell.textContent = event.time ?? '--';
-
-
-                // Trạng thái
                 const statusCell = document.createElement('td');
+                statusCell.textContent = event.status;
 
-                statusCell.textContent = event.status ?? '--';
-
-
-                // Nội dung cảnh báo
                 const messageCell = document.createElement('td');
 
                 const badge = document.createElement('span');
-
                 badge.className =
-                    `status-badge status-${normalizeStatusClass(event.status)}`;
+                    'status-badge status-' +
+                    String(event.status).toLowerCase();
 
-                badge.textContent =
-                    event.message ?? 'Không có nội dung';
-
+                badge.textContent = event.message;
 
                 messageCell.appendChild(badge);
 
-                row.append(
-                    timeCell,
-                    statusCell,
-                    messageCell
-                );
+                row.appendChild(timeCell);
+                row.appendChild(statusCell);
+                row.appendChild(messageCell);
 
                 tbody.appendChild(row);
-
             });
 
         } catch (error) {
-
             console.error('Lỗi tải lịch sử:', error);
-
-            setServerConnection(false);
 
             tbody.innerHTML = `
                 <tr>
                     <td colspan="3" class="history-empty">
-                        Không thể tải lịch sử cảnh báo
+                        ${EMPTY_ICON}
+                        <span>Chưa có dữ liệu cảnh báo</span>
                     </td>
                 </tr>
             `;
         }
     }
 
-
-    // ==============================
-    // KHỞI TẠO GIAO DIỆN
-    // ==============================
-
-    setWaterLevel(0);
-
-    setStatus(
-        'floodStatusLine',
-        'floodStatus',
-        'An toàn',
-        'safe'
-    );
-
-    setStatus(
-        'landslideStatusLine',
-        'landslideStatus',
-        'An toàn',
-        'safe'
-    );
-
-
-    // Tải lịch sử khi mở trang
     loadHistory();
-
-
-    // Tự động cập nhật lịch sử mỗi 5 giây
-    window.setInterval(loadHistory, 5000);
-
-
-    // Các hàm setWaterLevel(), setStatus(),
-    // setDeviceStatus() có thể được gọi khi nhận
-    // dữ liệu thực tế từ ESP32/API.
-
+    
 </script>
 
 </body>
