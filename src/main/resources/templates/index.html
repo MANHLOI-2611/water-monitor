@@ -12,42 +12,48 @@
 
 <body>
 
-    <!-- THANH TIEU DE -->
+    <!-- HEADER -->
     <header class="header">
         <h1>WATER MONITOR</h1>
         <p>Hệ thống giám sát mực nước và cảnh báo sạt lở</p>
     </header>
 
-    <!-- NOI DUNG CHINH -->
+    <!-- MAIN CONTENT -->
     <main class="container">
 
+        <!-- TỔNG QUAN -->
         <h2 class="section-title">Tổng quan hệ thống</h2>
 
-        <!-- CAC THE THONG SO -->
         <div class="dashboard">
 
             <div class="card">
                 <h3>MỰC NƯỚC HIỆN TẠI</h3>
                 <div class="value">0%</div>
-                <p class="description">Mức nước so với ngưỡng tối đa</p>
+                <p class="description">
+                    Mức nước so với ngưỡng tối đa
+                </p>
             </div>
 
             <div class="card">
                 <h3>TRẠNG THÁI NGẬP LỤT</h3>
                 <div class="value status-safe">AN TOÀN</div>
-                <p class="description">Chưa phát hiện nguy cơ ngập lụt</p>
+                <p class="description">
+                    Chưa phát hiện nguy cơ ngập lụt
+                </p>
             </div>
 
             <div class="card">
                 <h3>TRẠNG THÁI SẠT LỞ</h3>
                 <div class="value status-safe">AN TOÀN</div>
-                <p class="description">Độ nghiêng trong giới hạn cho phép</p>
+                <p class="description">
+                    Độ nghiêng trong giới hạn cho phép
+                </p>
             </div>
 
         </div>
 
-        <!-- TRANG THAI KET NOI -->
-        <h2 class="section-title" style="margin-top: 35px;">
+        <!-- TRẠNG THÁI THIẾT BỊ -->
+        <h2 class="section-title device-title">
             Trạng thái thiết bị
         </h2>
 
@@ -56,103 +62,136 @@
             <div class="card">
                 <h3>ESP32</h3>
                 <div class="value status-safe">ĐANG HOẠT ĐỘNG</div>
-                <p class="description">Thiết bị giám sát trung tâm</p>
+                <p class="description">
+                    Thiết bị giám sát trung tâm
+                </p>
             </div>
 
             <div class="card">
                 <h3>CẢM BIẾN MỰC NƯỚC</h3>
                 <div class="value status-safe">HOẠT ĐỘNG</div>
-                <p class="description">Cảm biến HC-SR04</p>
+                <p class="description">
+                    Cảm biến HC-SR04
+                </p>
             </div>
 
             <div class="card">
                 <h3>CẢM BIẾN GÓC NGHIÊNG</h3>
                 <div class="value status-safe">HOẠT ĐỘNG</div>
-                <p class="description">Cảm biến MPU6050</p>
+                <p class="description">
+                    Cảm biến MPU6050
+                </p>
             </div>
 
         </div>
 
+        <!-- LỊCH SỬ CẢNH BÁO -->
+        <section class="history-section">
+
+            <div class="history-heading">
+                <div>
+                    <h2>Lịch sử cảnh báo</h2>
+                    <p>
+                        Theo dõi các lần thay đổi trạng thái của hệ thống
+                    </p>
+                </div>
+
+                <span class="history-label">HISTORY</span>
+            </div>
+
+            <div class="history-table-wrapper">
+                <table class="history-table">
+
+                    <thead>
+                        <tr>
+                            <th>Ngày giờ</th>
+                            <th>Trạng thái cảnh báo</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="historyBody">
+                        <tr>
+                            <td colspan="2" class="history-empty">
+                                Đang tải lịch sử...
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+
+        </section>
+
     </main>
 
-<section class="history-section">
-    <div class="history-heading">
-        <div>
-            <h2>Lịch sử cảnh báo</h2>
-            <p>Theo dõi các lần thay đổi trạng thái của hệ thống</p>
-        </div>
-        <span class="history-label">HISTORY</span>
-    </div>
+    <!-- SCRIPT LỊCH SỬ -->
+    <script>
+        async function loadHistory() {
+            try {
+                const response = await fetch('/api/history');
 
-    <div class="history-table-wrapper">
-        <table class="history-table">
-            <thead>
-                <tr>
-                    <th>Ngày giờ</th>
-                    <th>Trạng thái cảnh báo</th>
-                </tr>
-            </thead>
+                if (!response.ok) {
+                    throw new Error('Không thể tải lịch sử');
+                }
 
-            <tbody id="historyBody">
-                <tr>
-                    <td colspan="2" class="history-empty">
-                        Đang tải lịch sử...
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</section>
+                const history = await response.json();
+                const tbody = document.getElementById('historyBody');
 
-<script>
-async function loadHistory() {
-    try {
-        const response = await fetch('/api/history');
-        const history = await response.json();
+                tbody.innerHTML = '';
 
-        const tbody = document.getElementById('historyBody');
-        tbody.innerHTML = '';
+                if (history.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="2" class="history-empty">
+                                Chưa có dữ liệu cảnh báo
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
 
-        if (history.length === 0) {
-            tbody.innerHTML = `
-                <tr>
-                    <td colspan="2" class="history-empty">
-                        Chưa có dữ liệu cảnh báo
-                    </td>
-                </tr>`;
-            return;
+                history.forEach(event => {
+                    const row = document.createElement('tr');
+
+                    const timeCell = document.createElement('td');
+                    timeCell.textContent = event.time;
+                    timeCell.className = 'history-time';
+
+                    const statusCell = document.createElement('td');
+
+                    const badge = document.createElement('span');
+                    badge.className =
+                        'status-badge status-' +
+                        event.status.toLowerCase();
+
+                    badge.textContent = event.message;
+
+                    statusCell.appendChild(badge);
+
+                    row.appendChild(timeCell);
+                    row.appendChild(statusCell);
+
+                    tbody.appendChild(row);
+                });
+
+            } catch (error) {
+                console.error('Lỗi tải lịch sử:', error);
+
+                document.getElementById('historyBody').innerHTML = `
+                    <tr>
+                        <td colspan="2" class="history-empty">
+                            Không thể tải lịch sử cảnh báo
+                        </td>
+                    </tr>
+                `;
+            }
         }
 
-        history.forEach(event => {
-            const row = document.createElement('tr');
+        loadHistory();
 
-            const timeCell = document.createElement('td');
-            timeCell.textContent = event.time;
-            timeCell.className = 'history-time';
+        // Cập nhật lịch sử mỗi 5 giây
+        setInterval(loadHistory, 5000);
+    </script>
 
-            const statusCell = document.createElement('td');
-
-            const badge = document.createElement('span');
-            badge.className = 'status-badge status-' +
-                event.status.toLowerCase();
-            badge.textContent = event.message;
-
-            statusCell.appendChild(badge);
-
-            row.appendChild(timeCell);
-            row.appendChild(statusCell);
-
-            tbody.appendChild(row);
-        });
-
-    } catch (error) {
-        console.error('Không tải được lịch sử:', error);
-    }
-}
-
-loadHistory();
-setInterval(loadHistory, 5000);
-</script>
 </body>
-
 </html>
