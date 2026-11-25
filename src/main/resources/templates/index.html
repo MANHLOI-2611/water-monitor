@@ -1,11 +1,9 @@
 
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Water Monitor - Giám sát mực nước</title>
 
     <link rel="stylesheet" th:href="@{/css/style.css}">
@@ -13,239 +11,278 @@
 
 <body>
 
-    <!-- HEADER -->
-    <header class="header">
-        <div class="header-inner">
-
-            <div>
-                <h1>WATER MONITOR</h1>
-                <p>Hệ thống giám sát mực nước và cảnh báo sạt lở</p>
-            </div>
-
-            <div class="live-pill">
-                <span class="live-dot"></span>
-                HỆ THỐNG GIÁM SÁT
-            </div>
-
+<header class="topbar">
+    <div class="brand">
+        <div class="brand-title">
+            WATER MONITOR
+            <span class="brand-drop">💧</span>
         </div>
-    </header>
+        <p>Hệ thống giám sát mực nước và cảnh báo sạt lở</p>
+        <div class="brand-subtitle">HỆ THỐNG GIÁM SÁT</div>
+    </div>
 
-    <!-- NỘI DUNG CHÍNH -->
-    <main class="container">
+    <div class="header-tools">
+        <span id="currentTime" class="current-time">--/--/---- --:--:--</span>
 
-        <!-- TỔNG QUAN -->
-        <h2 class="section-title">Tổng quan hệ thống</h2>
+        <span class="header-icon" title="Cài đặt">⚙</span>
+        <span class="header-icon" title="Tài khoản">♙</span>
+        <span class="header-icon notification" title="Thông báo">♧</span>
+    </div>
+</header>
 
-        <div class="dashboard">
+<main class="container">
 
-            <!-- MỰC NƯỚC -->
-            <div class="card">
+    <!-- TỔNG QUAN -->
+    <h2 class="section-title">Tổng quan hệ thống</h2>
+
+    <section class="dashboard">
+
+        <!-- MỰC NƯỚC -->
+        <article class="card water-card">
+            <div class="card-content">
                 <h3>MỰC NƯỚC HIỆN TẠI</h3>
-
-                <div class="value">0%</div>
-
-                <div class="gauge">
-                    <div class="gauge-fill" style="--level: 0%;"></div>
-                </div>
-
-                <p class="description">
-                    Mức nước so với ngưỡng tối đa
-                </p>
+                <div class="water-value" id="waterValue">0%</div>
+                <p class="description">Mức nước so với ngưỡng tối đa</p>
             </div>
 
-            <!-- TRẠNG THÁI NGẬP -->
-            <div class="card">
+            <div class="gauge" id="waterGauge" style="--level: 0%;">
+                <div class="gauge-inner">
+                    <span id="gaugeValue">0%</span>
+                </div>
+            </div>
+        </article>
+
+        <!-- NGẬP LỤT -->
+        <article class="card status-card">
+            <div class="card-content">
                 <h3>TRẠNG THÁI NGẬP LỤT</h3>
-
-                <div class="state state-safe">
-                    AN TOÀN
-                </div>
-
-                <p class="description">
-                    Chưa phát hiện nguy cơ ngập lụt
-                </p>
+                <span class="status-text safe" id="floodStatus">AN TOÀN</span>
+                <p class="description">Chưa phát hiện nguy cơ ngập lụt</p>
             </div>
 
-            <!-- TRẠNG THÁI SẠT LỞ -->
-            <div class="card">
+            <div class="card-icon flood-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48">
+                    <path d="M7 25c5-5 10 5 15 0s10 5 15 0" />
+                    <path d="M7 32c5-5 10 5 15 0s10 5 15 0" />
+                    <path d="M7 18c5-5 10 5 15 0s10 5 15 0" />
+                </svg>
+            </div>
+        </article>
+
+        <!-- SẠT LỞ -->
+        <article class="card status-card">
+            <div class="card-content">
                 <h3>TRẠNG THÁI SẠT LỞ</h3>
-
-                <div class="state state-safe">
-                    AN TOÀN
-                </div>
-
-                <p class="description">
-                    Độ nghiêng trong giới hạn cho phép
-                </p>
+                <span class="status-text safe" id="landslideStatus">AN TOÀN</span>
+                <p class="description">Độ nghiêng trong giới hạn cho phép</p>
             </div>
 
-        </div>
+            <div class="card-icon landslide-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48">
+                    <path d="M6 36 19 10l8 15 5-7 10 18Z" />
+                    <circle cx="30" cy="29" r="2" />
+                    <circle cx="35" cy="33" r="2" />
+                    <path d="M8 39h32" />
+                </svg>
+            </div>
+        </article>
 
-        <!-- TRẠNG THÁI THIẾT BỊ -->
-        <h2 class="section-title">Trạng thái thiết bị</h2>
+    </section>
 
-        <div class="dashboard">
+    <!-- TRẠNG THÁI THIẾT BỊ -->
+    <h2 class="section-title device-title">Trạng thái thiết bị</h2>
 
-            <div class="card">
+    <section class="dashboard">
+
+        <article class="card device-card">
+            <div class="card-content">
                 <h3>ESP32</h3>
-
-                <div class="state state-safe">
-                    ĐANG HOẠT ĐỘNG
+                <div class="device-status">
+                    <span class="device-status-text">ĐANG HOẠT ĐỘNG</span>
+                    <span class="online-dot"></span>
                 </div>
-
-                <p class="description">
-                    Thiết bị giám sát trung tâm
-                </p>
+                <p class="description">Thiết bị giám sát trung tâm</p>
             </div>
 
-            <div class="card">
+            <div class="card-icon chip-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48">
+                    <rect x="12" y="12" width="24" height="24" rx="4" />
+                    <rect x="18" y="18" width="12" height="12" rx="2" />
+                    <path d="M17 5v7M24 5v7M31 5v7M17 36v7M24 36v7M31 36v7M5 17h7M5 24h7M5 31h7M36 17h7M36 24h7M36 31h7" />
+                </svg>
+            </div>
+        </article>
+
+        <article class="card device-card">
+            <div class="card-content">
                 <h3>CẢM BIẾN MỰC NƯỚC</h3>
-
-                <div class="state state-safe">
-                    HOẠT ĐỘNG
+                <div class="device-status">
+                    <span class="device-status-text">HOẠT ĐỘNG</span>
+                    <span class="online-dot"></span>
                 </div>
-
-                <p class="description">
-                    Cảm biến HC-SR04
-                </p>
+                <p class="description">Cảm biến HC-SR04</p>
             </div>
 
-            <div class="card">
+            <div class="card-icon sensor-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48">
+                    <circle cx="24" cy="24" r="4" />
+                    <path d="M15 15a13 13 0 0 0 0 18M33 15a13 13 0 0 1 0 18" />
+                    <path d="M10 10a20 20 0 0 0 0 28M38 10a20 20 0 0 1 0 28" />
+                </svg>
+            </div>
+        </article>
+
+        <article class="card device-card">
+            <div class="card-content">
                 <h3>CẢM BIẾN GÓC NGHIÊNG</h3>
-
-                <div class="state state-safe">
-                    HOẠT ĐỘNG
+                <div class="device-status">
+                    <span class="device-status-text">HOẠT ĐỘNG</span>
+                    <span class="online-dot"></span>
                 </div>
-
-                <p class="description">
-                    Cảm biến MPU6050
-                </p>
+                <p class="description">Cảm biến MPU6050</p>
             </div>
 
+            <div class="card-icon sensor-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48">
+                    <circle cx="24" cy="24" r="15" />
+                    <path d="M24 5v9M24 34v9M5 24h9M34 24h9" />
+                    <path d="m18 29 6-15 6 15-6-4Z" />
+                </svg>
+            </div>
+        </article>
+
+    </section>
+
+    <!-- LỊCH SỬ CẢNH BÁO -->
+    <section class="history-section">
+
+        <div class="history-heading">
+            <div>
+                <h2>
+                    Lịch sử cảnh báo
+                    <span class="history-symbol">◴</span>
+                    <span class="history-symbol">♧</span>
+                </h2>
+                <p>Theo dõi các lần thay đổi trạng thái của hệ thống</p>
+            </div>
         </div>
 
-        <!-- LỊCH SỬ CẢNH BÁO -->
-        <section class="history-section">
-
-            <div class="history-heading">
-
-                <div>
-                    <h2>Lịch sử cảnh báo</h2>
-
-                    <p>
-                        Theo dõi các lần thay đổi trạng thái của hệ thống
-                    </p>
-                </div>
-
-                <span class="history-label">
-                    HISTORY
-                </span>
-
-            </div>
-
-            <div class="history-table-wrapper">
-
-                <table class="history-table">
-
-                    <thead>
-                        <tr>
-                            <th>Ngày giờ</th>
-                            <th>Trạng thái cảnh báo</th>
-                        </tr>
-                    </thead>
-
-                    <tbody id="historyBody">
-                        <tr>
-                            <td colspan="2" class="history-empty">
-                                Đang tải lịch sử...
-                            </td>
-                        </tr>
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </section>
-
-    </main>
-
-    <!-- SCRIPT LỊCH SỬ -->
-    <script>
-        async function loadHistory() {
-            try {
-                const response = await fetch('/api/history');
-
-                if (!response.ok) {
-                    throw new Error('Không thể tải lịch sử');
-                }
-
-                const history = await response.json();
-
-                const tbody = document.getElementById('historyBody');
-
-                tbody.innerHTML = '';
-
-                if (history.length === 0) {
-                    tbody.innerHTML = `
-                        <tr>
-                            <td colspan="2" class="history-empty">
-                                Chưa có dữ liệu cảnh báo
-                            </td>
-                        </tr>
-                    `;
-                    return;
-                }
-
-                history.forEach(event => {
-
-                    const row = document.createElement('tr');
-
-                    // Ngày giờ
-                    const timeCell = document.createElement('td');
-
-                    timeCell.textContent = event.time;
-                    timeCell.className = 'history-time';
-
-                    // Trạng thái
-                    const statusCell = document.createElement('td');
-
-                    const badge = document.createElement('span');
-
-                    badge.className =
-                        'status-badge status-' +
-                        event.status.toLowerCase();
-
-                    badge.textContent = event.message;
-
-                    statusCell.appendChild(badge);
-
-                    row.appendChild(timeCell);
-                    row.appendChild(statusCell);
-
-                    tbody.appendChild(row);
-                });
-
-            } catch (error) {
-
-                console.error('Lỗi tải lịch sử:', error);
-
-                document.getElementById('historyBody').innerHTML = `
+        <div class="history-table-wrapper">
+            <table class="history-table">
+                <thead>
                     <tr>
-                        <td colspan="2" class="history-empty">
-                            Không thể tải lịch sử cảnh báo
+                        <th>Ngày giờ</th>
+                        <th>Trạng thái</th>
+                        <th>Cảnh báo</th>
+                    </tr>
+                </thead>
+
+                <tbody id="historyBody">
+                    <tr>
+                        <td colspan="3" class="history-empty">
+                            <span class="empty-icon">▱</span>
+                            <span>Đang tải lịch sử cảnh báo...</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </section>
+
+</main>
+
+<script>
+    // Hiển thị thời gian hiện tại theo múi giờ Việt Nam
+    function updateClock() {
+        const now = new Date();
+
+        document.getElementById('currentTime').textContent =
+            new Intl.DateTimeFormat('vi-VN', {
+                timeZone: 'Asia/Ho_Chi_Minh',
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            }).format(now);
+    }
+
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // Tải lịch sử cảnh báo từ server
+    async function loadHistory() {
+        const tbody = document.getElementById('historyBody');
+
+        try {
+            const response = await fetch('/api/history');
+
+            if (!response.ok) {
+                throw new Error('Không thể tải lịch sử');
+            }
+
+            const history = await response.json();
+            tbody.innerHTML = '';
+
+            if (history.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="3" class="history-empty">
+                            <span class="empty-icon">▱</span>
+                            <span>Chưa có dữ liệu cảnh báo</span>
                         </td>
                     </tr>
                 `;
+                return;
             }
+
+            history.forEach(event => {
+                const row = document.createElement('tr');
+
+                const timeCell = document.createElement('td');
+                timeCell.className = 'history-time';
+                timeCell.textContent = event.time;
+
+                const statusCell = document.createElement('td');
+                statusCell.textContent = event.status;
+
+                const messageCell = document.createElement('td');
+
+                const badge = document.createElement('span');
+                badge.className =
+                    'status-badge status-' +
+                    String(event.status).toLowerCase();
+
+                badge.textContent = event.message;
+
+                messageCell.appendChild(badge);
+
+                row.appendChild(timeCell);
+                row.appendChild(statusCell);
+                row.appendChild(messageCell);
+
+                tbody.appendChild(row);
+            });
+
+        } catch (error) {
+            console.error('Lỗi tải lịch sử:', error);
+
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="3" class="history-empty">
+                        Không thể tải lịch sử cảnh báo
+                    </td>
+                </tr>
+            `;
         }
+    }
 
-        // Tải lịch sử khi mở trang
-        loadHistory();
-
-        // Tự cập nhật lịch sử mỗi 5 giây
-        setInterval(loadHistory, 5000);
-    </script>
+    loadHistory();
+    setInterval(loadHistory, 5000);
+</script>
 
 </body>
 </html>
