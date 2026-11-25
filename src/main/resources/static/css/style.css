@@ -1,4 +1,3 @@
-
 /* ===== MÀU SẮC ===== */
 :root {
     --bg: #eaf1f7;
@@ -23,8 +22,8 @@
     --both-bg: #ffe0e0;
 
     --radius: 13px;
-    --shadow: 0 5px 12px rgba(18, 39, 61, .10),
-              0 12px 22px rgba(18, 39, 61, .06);
+    --shadow: 0 4px 10px rgba(18, 39, 61, .10),
+              0 10px 20px rgba(18, 39, 61, .06);
 }
 
 /* ===== RESET ===== */
@@ -35,6 +34,7 @@
 }
 
 body {
+    position: relative;
     font-family: "Be Vietnam Pro", "Segoe UI", Arial, sans-serif;
     background: linear-gradient(180deg, #e6eef5 0%, #f4f8fb 100%);
     color: var(--ink);
@@ -42,17 +42,32 @@ body {
     line-height: 1.5;
 }
 
+/* Ngôi sao mờ ở góc dưới bên phải */
+body::after {
+    content: "";
+    position: fixed;
+    right: 36px;
+    bottom: 60px;
+    width: 40px;
+    height: 40px;
+    pointer-events: none;
+    opacity: .5;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 0c.7 6.5 5.5 11.3 12 12-6.5.7-11.3 5.5-12 12-.7-6.5-5.5-11.3-12-12C6.500 11.300 11.300 6.500 12 0Z' fill='%23ffffff'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
 /* ===== HEADER ===== */
 .topbar {
     min-height: 86px;
-    padding: 15px 28px;
+    padding: 15px 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 24px;
 
     color: #ffffff;
-    background: linear-gradient(115deg, #07172e, #0b2d53 55%, #07162d);
+    background:
+        radial-gradient(ellipse 45% 130% at 55% 50%, rgba(18, 74, 130, .75), transparent 70%),
+        linear-gradient(115deg, #07172e, #0a2748 55%, #07162d);
     border-radius: 0 0 18px 18px;
     box-shadow: 0 7px 18px rgba(4, 19, 39, .28);
 }
@@ -60,14 +75,17 @@ body {
 .brand-title {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
     font-size: 24px;
-    font-weight: 800;
-    letter-spacing: .4px;
+    font-weight: 600;
+    letter-spacing: .3px;
+    line-height: 1.3;
 }
 
 .brand-drop {
-    font-size: 24px;
+    width: 24px;
+    height: 24px;
+    flex: none;
 }
 
 .brand p {
@@ -78,28 +96,41 @@ body {
 
 .brand-subtitle {
     color: #e1eaf3;
-    font-size: 11px;
-    letter-spacing: .3px;
+    font-size: 13px;
+    line-height: 1.3;
 }
 
 .header-tools {
     display: flex;
     align-items: center;
-    gap: 18px;
+    gap: 14px;
 }
 
 .current-time {
+    margin-right: 2px;
     color: #dbe7f3;
-    font-size: 11px;
+    font-size: 12px;
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
+    letter-spacing: .3px;
 }
 
 .header-icon {
+    display: inline-flex;
+    width: 20px;
+    height: 20px;
     color: #e2eaf4;
-    font-size: 19px;
     cursor: default;
-    line-height: 1;
+}
+
+.header-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
 .notification {
@@ -109,10 +140,10 @@ body {
 .notification::after {
     content: "";
     position: absolute;
-    top: -3px;
-    right: -3px;
-    width: 5px;
-    height: 5px;
+    top: -2px;
+    right: -2px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
     background: #f87171;
 }
@@ -126,8 +157,8 @@ body {
 .section-title {
     margin: 0 0 12px;
     color: #172b45;
-    font-size: 17px;
-    font-weight: 800;
+    font-size: 16px;
+    font-weight: 700;
 }
 
 .device-title {
@@ -161,13 +192,14 @@ body {
 .card-content {
     min-width: 0;
     flex: 1;
+    align-self: flex-start;
 }
 
 .card h3 {
     margin-bottom: 7px;
     color: #253b53;
     font-size: 12px;
-    font-weight: 800;
+    font-weight: 700;
     line-height: 1.4;
 }
 
@@ -180,8 +212,8 @@ body {
 
 .water-value {
     color: #142a43;
-    font-size: 27px;
-    font-weight: 800;
+    font-size: 26px;
+    font-weight: 700;
     line-height: 1.2;
 }
 
@@ -195,10 +227,11 @@ body {
     position: relative;
     flex: none;
 
-    width: 66px;
-    height: 66px;
+    width: 76px;
+    height: 76px;
     border-radius: 50%;
 
+    /* Vòng tròn hở phía dưới, bắt đầu từ góc dưới bên trái */
     background: conic-gradient(
         from 220deg,
         #278b45 0%,
@@ -208,16 +241,34 @@ body {
         transparent 78%,
         transparent 100%
     );
-
-    transform: rotate(0deg);
 }
 
 .gauge::before {
     content: "";
     position: absolute;
-    inset: 7px;
+    inset: 8px;
     border-radius: 50%;
     background: #ffffff;
+}
+
+/* Chấm xanh ở đầu vòng */
+.gauge-dot {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    transform: rotate(220deg);
+}
+
+.gauge-dot::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 9px;
+    height: 9px;
+    margin-left: -4.5px;
+    border-radius: 50%;
+    background: #22a447;
 }
 
 .gauge-inner {
@@ -231,17 +282,17 @@ body {
 
 .gauge-inner span {
     color: #172b45;
-    font-size: 17px;
-    font-weight: 800;
+    font-size: 18px;
+    font-weight: 700;
 }
 
 /* ===== TRẠNG THÁI ===== */
 .status-text {
     display: inline-block;
-    padding: 3px 9px;
+    padding: 2px 9px;
     border-radius: 6px;
     font-size: 11px;
-    font-weight: 800;
+    font-weight: 700;
     line-height: 1.5;
 }
 
@@ -268,8 +319,9 @@ body {
 /* ===== ICON THẺ ===== */
 .card-icon {
     flex: none;
-    width: 35px;
-    height: 35px;
+    align-self: flex-start;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -281,9 +333,21 @@ body {
     height: 26px;
     fill: none;
     stroke: currentColor;
-    stroke-width: 2.8;
+    stroke-width: 2.4;
     stroke-linecap: round;
     stroke-linejoin: round;
+}
+
+/* Icon đặc (sóng nước, núi) */
+.card-icon.fill-icon svg {
+    width: 28px;
+    height: 28px;
+    fill: currentColor;
+    stroke: none;
+}
+
+.card-icon.fill-icon svg .cut {
+    fill: #d9f3df;
 }
 
 .flood-icon {
@@ -320,8 +384,8 @@ body {
 
 .device-status-text {
     color: var(--safe);
-    font-size: 11px;
-    font-weight: 800;
+    font-size: 12px;
+    font-weight: 700;
 }
 
 .online-dot {
@@ -330,13 +394,21 @@ body {
     flex: none;
     border-radius: 50%;
     background: #22a447;
-    box-shadow: 0 0 0 3px rgba(34, 164, 71, .12);
+}
+
+/* ESP32: màu xanh dương */
+.device-status.info .device-status-text {
+    color: #1675b9;
+}
+
+.device-status.info .online-dot {
+    background: #1675b9;
 }
 
 /* ===== LỊCH SỬ CẢNH BÁO ===== */
 .history-section {
     width: 100%;
-    margin: 16px 0 0;
+    margin: 20px 0 0;
 }
 
 .history-heading {
@@ -348,22 +420,30 @@ body {
 }
 
 .history-heading h2 {
+    display: flex;
+    align-items: center;
+    gap: 6px;
     color: #172b45;
     font-size: 19px;
-    font-weight: 800;
+    font-weight: 700;
     line-height: 1.4;
 }
 
 .history-heading p {
-    margin-top: 2px;
+    margin-top: 0;
     color: #52667b;
     font-size: 12px;
 }
 
 .history-symbol {
-    color: #52667b;
-    font-size: 17px;
-    font-weight: 400;
+    width: 19px;
+    height: 19px;
+    flex: none;
+    fill: none;
+    stroke: #3a4f66;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
 .history-table-wrapper {
@@ -380,6 +460,7 @@ body {
 .history-table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed; /* 3 cột chia đều */
 }
 
 .history-table thead {
@@ -389,17 +470,17 @@ body {
 }
 
 .history-table th {
-    padding: 10px 16px;
-    background: #f7f9fb;
+    padding: 12px 18px;
+    background: #ffffff;
     color: #263b52;
     text-align: left;
-    font-size: 11px;
-    font-weight: 800;
-    border-bottom: 1px solid #e1e8ef;
+    font-size: 12px;
+    font-weight: 700;
+    border-bottom: 1px solid #e8eef4;
 }
 
 .history-table td {
-    padding: 11px 16px;
+    padding: 11px 18px;
     color: #334b63;
     font-size: 11px;
     border-bottom: 1px solid #edf1f5;
@@ -426,7 +507,7 @@ body {
     padding: 4px 9px;
     border-radius: 20px;
     font-size: 10px;
-    font-weight: 800;
+    font-weight: 700;
     white-space: nowrap;
 }
 
@@ -458,19 +539,29 @@ body {
     background: var(--both-bg);
 }
 
-.history-empty {
-    height: 64px;
-    padding: 18px !important;
+/* Trạng thái rỗng */
+.history-table td.history-empty {
+    padding: 14px 18px 22px;
     text-align: center;
-    color: #8798a9 !important;
+    color: #8798a9;
+    font-size: 14px;
+    border-bottom: none;
+}
+
+.history-empty span {
+    display: block;
 }
 
 .empty-icon {
     display: block;
-    margin-bottom: 3px;
-    color: #a8b5c2;
-    font-size: 25px;
-    line-height: 1.1;
+    width: 26px;
+    height: 26px;
+    margin: 0 auto 6px;
+    fill: none;
+    stroke: #9aa9b8;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
 /* ===== RESPONSIVE ===== */
@@ -509,6 +600,10 @@ body {
     .history-heading h2 {
         font-size: 18px;
     }
+
+    .device-title {
+        margin-top: 16px;
+    }
 }
 
 @media (max-width: 420px) {
@@ -525,8 +620,12 @@ body {
     }
 
     .gauge {
-        width: 58px;
-        height: 58px;
+        width: 64px;
+        height: 64px;
+    }
+
+    .gauge::before {
+        inset: 7px;
     }
 
     .history-table th,
