@@ -74,6 +74,62 @@
         </div>
 
     </main>
+<section class="history-section">
+    <h2>Lịch sử cảnh báo</h2>
 
+    <table class="history-table">
+        <thead>
+            <tr>
+                <th>Ngày giờ</th>
+                <th>Trạng thái</th>
+            </tr>
+        </thead>
+
+        <tbody id="historyBody">
+            <tr>
+                <td colspan="2">Đang tải lịch sử...</td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+<script>
+async function loadHistory() {
+    try {
+        const response = await fetch('/api/history');
+        const history = await response.json();
+
+        const tbody = document.getElementById('historyBody');
+        tbody.innerHTML = '';
+
+        if (history.length === 0) {
+            tbody.innerHTML =
+                '<tr><td colspan="2">Chưa có lịch sử</td></tr>';
+            return;
+        }
+
+        history.forEach(event => {
+            const row = document.createElement('tr');
+
+            const timeCell = document.createElement('td');
+            timeCell.textContent = event.time;
+
+            const statusCell = document.createElement('td');
+            statusCell.textContent = event.message;
+
+            row.appendChild(timeCell);
+            row.appendChild(statusCell);
+            tbody.appendChild(row);
+        });
+
+    } catch (error) {
+        console.error('Không tải được lịch sử:', error);
+    }
+}
+
+loadHistory();
+setInterval(loadHistory, 5000);
+</script>
 </body>
+
 </html>
