@@ -8,7 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <!-- Nếu chạy file tĩnh không qua Thymeleaf, có thể đổi thành href="./style.css" hoặc "./css/style.css" -->
+    <link rel="stylesheet" th:href="@{/css/style.css}" href="./css/style.css">
 </head>
 
 <body>
@@ -16,18 +17,16 @@
 <header class="topbar">
     <div class="brand">
         <div class="brand-title">
-            WATER MONITOR
-            <span class="brand-drop" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="22" height="22">
-                    <path d="M12 2.5C12 2.5 5 10.2 5 14.8a7 7 0 0 0 14 0C19 10.2 12 2.5 12 2.5Z" fill="#4da6ff"/>
-                    <path d="M9.2 15.2a3.2 3.2 0 0 0 2.8 2.8" fill="none" stroke="#bfe0ff" stroke-width="1.6" stroke-linecap="round"/>
-                </svg>
-            </span>
+            <span>WATER MONITOR</span>
+            <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 2.5C12 2.5 5 10.2 5 14.8a7 7 0 0 0 14 0C19 10.2 12 2.5 12 2.5Z" fill="#4da6ff"/>
+                <path d="M9.2 15.2a3.2 3.2 0 0 0 2.8 2.8" fill="none" stroke="#bfe0ff" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
         </div>
         <p>Hệ thống giám sát mực nước và cảnh báo sạt lở</p>
         <div class="brand-subtitle">
             <span>HỆ THỐNG GIÁM SÁT</span>
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
                 <path d="M2 12c2.5-2.5 5-2.5 7.5 0s5 2.5 7.5 0 5-2.5 5 0"/>
                 <path d="M2 17c2.5-2.5 5-2.5 7.5 0s5 2.5 7.5 0 5-2.5 5 0"/>
             </svg>
@@ -38,21 +37,21 @@
         <span id="currentTime" class="current-time">--/--/---- --:--:--</span>
 
         <span class="header-icon" title="Cài đặt">
-            <svg viewBox="0 0 24 24">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="3"/>
                 <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/>
             </svg>
         </span>
 
         <span class="header-icon" title="Tài khoản">
-            <svg viewBox="0 0 24 24">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M20 21a8 8 0 0 0-16 0"/>
                 <circle cx="12" cy="7" r="4"/>
             </svg>
         </span>
 
         <span class="header-icon notification" title="Thông báo">
-            <svg viewBox="0 0 24 24">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
                 <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
             </svg>
@@ -68,7 +67,7 @@
     <section class="dashboard">
 
         <!-- MỰC NƯỚC -->
-        <article class="card water-card">
+        <article class="card">
             <div class="card-content">
                 <h3>MỰC NƯỚC HIỆN TẠI</h3>
                 <div class="water-value" id="waterValue">0%</div>
@@ -84,7 +83,7 @@
         </article>
 
         <!-- NGẬP LỤT -->
-        <article class="card status-card">
+        <article class="card">
             <div class="card-content">
                 <h3>TRẠNG THÁI NGẬP LỤT</h3>
                 <span class="status-text safe" id="floodStatus">AN TOÀN</span>
@@ -92,16 +91,16 @@
             </div>
 
             <div class="card-icon flood-icon" aria-hidden="true">
-                <svg viewBox="0 0 48 48">
-                    <path d="M8 22c4-4 8 4 12 0s8 4 12 0 6-2 8 0" />
-                    <path d="M8 29c4-4 8 4 12 0s8 4 12 0 6-2 8 0" />
-                    <path d="M8 36c4-4 8 4 12 0s8 4 12 0 6-2 8 0" />
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                    <path d="M3 10c2.5-2.5 5 2.5 7.5 0s5 2.5 7.5 0 2-1 3 0"/>
+                    <path d="M3 15c2.5-2.5 5 2.5 7.5 0s5 2.5 7.5 0 2-1 3 0"/>
+                    <path d="M3 20c2.5-2.5 5 2.5 7.5 0s5 2.5 7.5 0 2-1 3 0"/>
                 </svg>
             </div>
         </article>
 
         <!-- SẠT LỞ -->
-        <article class="card status-card">
+        <article class="card">
             <div class="card-content">
                 <h3>TRẠNG THÁI SẠT LỞ</h3>
                 <span class="status-text safe" id="landslideStatus">AN TOÀN</span>
@@ -109,11 +108,11 @@
             </div>
 
             <div class="card-icon landslide-icon" aria-hidden="true">
-                <svg viewBox="0 0 48 48">
-                    <path d="M6 36 19 10l8 15 5-7 10 18Z" />
-                    <circle cx="30" cy="29" r="2" />
-                    <circle cx="35" cy="33" r="2" />
-                    <path d="M8 39h32" />
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m3 18 6.5-12 4 7.5 2.5-3.5L21 18Z"/>
+                    <circle cx="15" cy="14.5" r="1"/>
+                    <circle cx="17.5" cy="16.5" r="1"/>
+                    <path d="M4 20h16"/>
                 </svg>
             </div>
         </article>
@@ -125,7 +124,7 @@
 
     <section class="dashboard">
 
-        <article class="card device-card">
+        <article class="card">
             <div class="card-content">
                 <h3>ESP32</h3>
                 <div class="device-status info">
@@ -136,15 +135,15 @@
             </div>
 
             <div class="card-icon chip-icon" aria-hidden="true">
-                <svg viewBox="0 0 48 48">
-                    <rect x="12" y="12" width="24" height="24" rx="4" />
-                    <rect x="18" y="18" width="12" height="12" rx="2" />
-                    <path d="M17 5v7M24 5v7M31 5v7M17 36v7M24 36v7M31 36v7M5 17h7M5 24h7M5 31h7M36 17h7M36 24h7M36 31h7" />
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="6" y="6" width="12" height="12" rx="2"/>
+                    <rect x="9" y="9" width="6" height="6" rx="1"/>
+                    <path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/>
                 </svg>
             </div>
         </article>
 
-        <article class="card device-card">
+        <article class="card">
             <div class="card-content">
                 <h3>CẢM BIẾN MỰC NƯỚC</h3>
                 <div class="device-status">
@@ -155,15 +154,15 @@
             </div>
 
             <div class="card-icon sensor-icon" aria-hidden="true">
-                <svg viewBox="0 0 48 48">
-                    <circle cx="24" cy="24" r="4" />
-                    <path d="M15 15a13 13 0 0 0 0 18M33 15a13 13 0 0 1 0 18" />
-                    <path d="M10 10a20 20 0 0 0 0 28M38 10a20 20 0 0 1 0 28" />
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <circle cx="12" cy="12" r="2"/>
+                    <path d="M7.5 7.5a6.5 6.5 0 0 0 0 9M16.5 7.5a6.5 6.5 0 0 1 0 9"/>
+                    <path d="M5 5a10 10 0 0 0 0 14M19 5a10 10 0 0 1 0 14"/>
                 </svg>
             </div>
         </article>
 
-        <article class="card device-card">
+        <article class="card">
             <div class="card-content">
                 <h3>CẢM BIẾN GÓC NGHIÊNG</h3>
                 <div class="device-status">
@@ -174,10 +173,10 @@
             </div>
 
             <div class="card-icon sensor-icon" aria-hidden="true">
-                <svg viewBox="0 0 48 48">
-                    <circle cx="24" cy="24" r="15" />
-                    <path d="M24 5v9M24 34v9M5 24h9M34 24h9" />
-                    <path d="m18 29 6-15 6 15-6-4Z" />
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="8"/>
+                    <path d="M12 2v4M12 18v4M2 12h4M18 12h4"/>
+                    <path d="m9 15 3-7 3 7-3-2Z"/>
                 </svg>
             </div>
         </article>
@@ -186,23 +185,18 @@
 
     <!-- LỊCH SỬ CẢNH BÁO -->
     <section class="history-section">
-
         <div class="history-heading">
             <div>
                 <h2>
-                    Lịch sử cảnh báo
-                    <span class="history-symbol" aria-hidden="true">
-                        <svg viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="9"/>
-                            <path d="M12 7v5l3 3"/>
-                        </svg>
-                    </span>
-                    <span class="history-symbol" aria-hidden="true">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
-                            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-                        </svg>
-                    </span>
+                    <span>Lịch sử cảnh báo</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3a4f66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="9"/>
+                        <path d="M12 7v5l3 3"/>
+                    </svg>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3a4f66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                    </svg>
                 </h2>
                 <p>Theo dõi các lần thay đổi trạng thái của hệ thống</p>
             </div>
@@ -217,12 +211,11 @@
                         <th>Cảnh báo</th>
                     </tr>
                 </thead>
-
                 <tbody id="historyBody">
                     <tr>
                         <td colspan="3" class="history-empty">
                             <span class="empty-icon" aria-hidden="true">
-                                <svg viewBox="0 0 24 24">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
                                     <path d="m3.3 7 8.7 5 8.7-5M12 22V12"/>
                                 </svg>
@@ -233,16 +226,13 @@
                 </tbody>
             </table>
         </div>
-
     </section>
 
 </main>
 
 <script>
-    // Hiển thị thời gian hiện tại theo múi giờ Việt Nam
     function updateClock() {
         const now = new Date();
-
         document.getElementById('currentTime').textContent =
             new Intl.DateTimeFormat('vi-VN', {
                 timeZone: 'Asia/Ho_Chi_Minh',
@@ -259,11 +249,11 @@
     updateClock();
     setInterval(updateClock, 1000);
 
-    const emptyHistoryTemplate = `
+    const emptyHistoryHtml = `
         <tr>
             <td colspan="3" class="history-empty">
                 <span class="empty-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
                         <path d="m3.3 7 8.7 5 8.7-5M12 22V12"/>
                     </svg>
@@ -273,22 +263,18 @@
         </tr>
     `;
 
-    // Tải lịch sử cảnh báo từ server
     async function loadHistory() {
         const tbody = document.getElementById('historyBody');
 
         try {
             const response = await fetch('/api/history');
-
-            if (!response.ok) {
-                throw new Error('Không thể tải lịch sử');
-            }
+            if (!response.ok) throw new Error('Không thể tải lịch sử');
 
             const history = await response.json();
             tbody.innerHTML = '';
 
             if (!Array.isArray(history) || history.length === 0) {
-                tbody.innerHTML = emptyHistoryTemplate;
+                tbody.innerHTML = emptyHistoryHtml;
                 return;
             }
 
@@ -303,31 +289,19 @@
                 statusCell.textContent = event.status;
 
                 const messageCell = document.createElement('td');
-
                 const badge = document.createElement('span');
-                badge.className =
-                    'status-badge status-' +
-                    String(event.status || 'safe').toLowerCase();
-
+                badge.className = 'status-badge status-' + String(event.status || 'safe').toLowerCase();
                 badge.textContent = event.message;
 
                 messageCell.appendChild(badge);
-
-                row.appendChild(timeCell);
-                row.appendChild(statusCell);
-                row.appendChild(messageCell);
-
+                row.append(timeCell, statusCell, messageCell);
                 tbody.appendChild(row);
             });
-
         } catch (error) {
             console.error('Lỗi tải lịch sử:', error);
-
             tbody.innerHTML = `
                 <tr>
-                    <td colspan="3" class="history-empty">
-                        Không thể tải lịch sử cảnh báo
-                    </td>
+                    <td colspan="3" class="history-empty">Không thể tải lịch sử cảnh báo</td>
                 </tr>
             `;
         }
