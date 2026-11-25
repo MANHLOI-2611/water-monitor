@@ -1,6 +1,6 @@
 /* ===== MÀU SẮC ===== */
 :root {
-    --bg: #eaf1f7;
+    --bg: #eef3f8;
     --surface: #ffffff;
     --ink: #172b45;
     --muted: #64778d;
@@ -21,91 +21,70 @@
     --both: #c62828;
     --both-bg: #ffe0e0;
 
-    --radius: 13px;
-    --shadow: 0 4px 10px rgba(18, 39, 61, .10),
-              0 10px 20px rgba(18, 39, 61, .06);
+    --radius: 14px;
+    --shadow: 0 4px 12px rgba(18, 39, 61, 0.07),
+              0 10px 24px rgba(18, 39, 61, 0.04);
 }
 
 /* ===== RESET ===== */
-* {
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
 body {
-    position: relative;
     font-family: "Be Vietnam Pro", "Segoe UI", Arial, sans-serif;
-    background: linear-gradient(180deg, #e6eef5 0%, #f4f8fb 100%);
+    background: linear-gradient(180deg, #e7eef5 0%, #f5f8fb 100%);
     color: var(--ink);
     min-height: 100vh;
     line-height: 1.5;
 }
 
-/* Ngôi sao mờ ở góc dưới bên phải */
-body::after {
-    content: "";
-    position: fixed;
-    right: 36px;
-    bottom: 60px;
-    width: 40px;
-    height: 40px;
-    pointer-events: none;
-    opacity: .55;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 0c.7 6.5 5.5 11.3 12 12-6.5.7-11.3 5.5-12 12-.7-6.5-5.5-11.3-12-12C6.500 11.300 11.300 6.500 12 0Z' fill='%23ffffff'/%3E%3C/svg%3E") center / contain no-repeat;
-}
-
 /* ===== HEADER ===== */
 .topbar {
-    min-height: 86px;
-    padding: 15px 24px;
+    min-height: 88px;
+    padding: 16px 28px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 24px;
+    gap: 20px;
 
     color: #ffffff;
     background:
-        radial-gradient(ellipse 45% 130% at 55% 50%, rgba(18, 74, 130, .75), transparent 70%),
-        linear-gradient(115deg, #07172e, #0a2748 55%, #07162d);
+        radial-gradient(ellipse 45% 130% at 55% 50%, rgba(22, 88, 150, 0.65), transparent 70%),
+        linear-gradient(115deg, #07172e 0%, #0a2748 55%, #07162d 100%);
     border-radius: 0 0 18px 18px;
-    box-shadow: 0 7px 18px rgba(4, 19, 39, .28);
+    box-shadow: 0 8px 20px rgba(4, 19, 39, 0.22);
 }
 
 .brand-title {
     display: flex;
     align-items: center;
-    gap: 7px;
-    font-size: 24px;
+    gap: 8px;
+    font-size: 23px;
     font-weight: 700;
-    letter-spacing: .3px;
+    letter-spacing: 0.3px;
     line-height: 1.25;
 }
 
-.brand-drop {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    flex: none;
-}
-
-.brand p,
-.brand-subtitle {
-    margin-top: 2px;
+.brand p {
+    margin-top: 3px;
     color: #c5d8ea;
-    font-size: 12px;
-    line-height: 1.35;
+    font-size: 12.5px;
 }
 
 .brand-subtitle {
-    color: #e1eaf3;
-    font-size: 13px;
+    margin-top: 4px;
+    color: #e4eef7;
+    font-size: 12px;
     font-weight: 600;
+    letter-spacing: 0.4px;
     display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
 }
 
 .header-tools {
@@ -115,32 +94,21 @@ body::after {
 }
 
 .current-time {
-    margin-right: 2px;
-    color: #dbe7f3;
-    font-size: 12px;
+    color: #dce8f4;
+    font-size: 12.5px;
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
-    letter-spacing: .3px;
 }
 
 .header-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 20px;
-    height: 20px;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
     color: #e2eaf4;
-    cursor: default;
-}
-
-.header-icon svg {
-    width: 100%;
-    height: 100%;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+    background: rgba(255, 255, 255, 0.06);
 }
 
 .notification {
@@ -150,18 +118,18 @@ body::after {
 .notification::after {
     content: "";
     position: absolute;
-    top: -2px;
-    right: -2px;
-    width: 6px;
-    height: 6px;
+    top: 4px;
+    right: 4px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
-    background: #f87171;
+    background: #ef4444;
 }
 
 /* ===== NỘI DUNG CHÍNH ===== */
 .container {
-    width: min(860px, calc(100% - 32px));
-    margin: 20px auto 35px;
+    width: min(900px, calc(100% - 32px));
+    margin: 22px auto 40px;
 }
 
 .section-title {
@@ -172,29 +140,28 @@ body::after {
 }
 
 .device-title {
-    margin-top: 20px;
+    margin-top: 22px;
 }
 
 /* ===== DASHBOARD ===== */
 .dashboard {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 13px;
+    gap: 14px;
 }
 
 .card {
-    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 10px;
+    gap: 12px;
 
     min-width: 0;
-    min-height: 106px;
-    padding: 17px;
+    min-height: 112px;
+    padding: 18px;
 
     background: var(--surface);
-    border: 1px solid rgba(219, 229, 238, .9);
+    border: 1px solid #e2eaf2;
     border-radius: var(--radius);
     box-shadow: var(--shadow);
 }
@@ -206,48 +173,41 @@ body::after {
 }
 
 .card h3 {
-    margin-bottom: 7px;
+    margin-bottom: 8px;
     color: #253b53;
     font-size: 12px;
     font-weight: 700;
-    line-height: 1.4;
+    letter-spacing: 0.2px;
 }
 
 .card .description {
-    margin-top: 7px;
-    color: #52667b;
-    font-size: 10.5px;
+    margin-top: 8px;
+    color: #5b6f85;
+    font-size: 11px;
     line-height: 1.45;
 }
 
 .water-value {
     color: #142a43;
-    font-size: 26px;
+    font-size: 28px;
     font-weight: 700;
     line-height: 1.15;
 }
 
 /* ===== ĐỒNG HỒ VÒNG TRÒN ===== */
-.water-card {
-    min-height: 106px;
-}
-
 .gauge {
     --level: 0%;
     position: relative;
     flex: none;
-
     width: 76px;
     height: 76px;
     border-radius: 50%;
-
-    /* Vòng tròn hở phía dưới, bắt đầu từ góc dưới bên trái */
     background: conic-gradient(
         from 220deg,
         #278b45 0%,
         #278b45 var(--level),
-        #8c9db0 var(--level),
-        #8c9db0 78%,
+        #cbd5e1 var(--level),
+        #cbd5e1 78%,
         transparent 78%,
         transparent 100%
     );
@@ -261,7 +221,6 @@ body::after {
     background: #ffffff;
 }
 
-/* Chấm xanh ở đầu vòng */
 .gauge-dot {
     position: absolute;
     inset: 0;
@@ -282,28 +241,28 @@ body::after {
 }
 
 .gauge-inner {
-    position: absolute;
-    inset: 0;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1;
 }
 
 .gauge-inner span {
     color: #172b45;
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 700;
 }
 
 /* ===== TRẠNG THÁI ===== */
 .status-text {
     display: inline-block;
-    padding: 2px 9px;
+    padding: 3px 10px;
     border-radius: 6px;
     font-size: 11px;
     font-weight: 700;
-    line-height: 1.5;
 }
 
 .status-text.safe {
@@ -332,49 +291,27 @@ body::after {
 .card-icon {
     flex: none;
     align-self: flex-start;
-    width: 36px;
-    height: 36px;
-    display: flex;
+    width: 38px;
+    height: 38px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 9px;
+    border-radius: 10px;
 }
 
-.card-icon svg {
-    width: 24px;
-    height: 24px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2.2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
-.flood-icon {
-    color: #1675b9;
-    background: #d9efff;
-}
-
-.landslide-icon {
-    color: #258244;
-    background: #d9f3df;
-}
-
+.flood-icon,
 .chip-icon {
     color: #1675b9;
     background: #d9efff;
 }
 
+.landslide-icon,
 .sensor-icon {
     color: #258244;
     background: #d9f3df;
 }
 
 /* ===== TRẠNG THÁI THIẾT BỊ ===== */
-.device-card {
-    min-height: 94px;
-}
-
 .device-status {
     display: flex;
     align-items: center;
@@ -396,7 +333,6 @@ body::after {
     background: #22a447;
 }
 
-/* ESP32: màu xanh dương */
 .device-status.info .device-status-text {
     color: #1675b9;
 }
@@ -407,62 +343,31 @@ body::after {
 
 /* ===== LỊCH SỬ CẢNH BÁO ===== */
 .history-section {
-    width: 100%;
-    margin: 22px 0 0;
-}
-
-.history-heading {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 10px;
+    margin-top: 24px;
 }
 
 .history-heading h2 {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 7px;
     color: #172b45;
     font-size: 18px;
     font-weight: 700;
-    line-height: 1.4;
 }
 
 .history-heading p {
     margin-top: 2px;
-    color: #52667b;
+    color: #5b6f85;
     font-size: 12px;
 }
 
-.history-symbol {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 18px;
-    height: 18px;
-    flex: none;
-    color: #3a4f66;
-}
-
-.history-symbol svg {
-    width: 100%;
-    height: 100%;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
 .history-table-wrapper {
-    width: 100%;
-    max-height: 340px;
+    margin-top: 10px;
+    max-height: 320px;
     overflow: auto;
-
-    background: #ffffff;
+    background: var(--surface);
     border: 1px solid #dce5ed;
-    border-radius: 11px;
+    border-radius: 12px;
     box-shadow: var(--shadow);
 }
 
@@ -472,27 +377,23 @@ body::after {
     table-layout: fixed;
 }
 
-.history-table thead {
+.history-table th {
     position: sticky;
     top: 0;
-    z-index: 2;
-}
-
-.history-table th {
     padding: 12px 18px;
-    background: #ffffff;
+    background: #f9fbfd;
     color: #263b52;
     text-align: left;
     font-size: 12px;
     font-weight: 700;
-    border-bottom: 1px solid #e8eef4;
+    border-bottom: 1px solid #e6edf4;
 }
 
 .history-table td {
     padding: 11px 18px;
     color: #334b63;
-    font-size: 11px;
-    border-bottom: 1px solid #edf1f5;
+    font-size: 11.5px;
+    border-bottom: 1px solid #eef2f6;
 }
 
 .history-table tbody tr:last-child td {
@@ -505,17 +406,17 @@ body::after {
 
 .history-time {
     color: #52667b !important;
-    white-space: nowrap;
     font-weight: 600;
+    white-space: nowrap;
 }
 
 .status-badge {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 4px 9px;
+    padding: 4px 10px;
     border-radius: 20px;
-    font-size: 10px;
+    font-size: 10.5px;
     font-weight: 700;
     white-space: nowrap;
 }
@@ -548,104 +449,35 @@ body::after {
     background: var(--both-bg);
 }
 
-/* Trạng thái rỗng */
 .history-table td.history-empty {
-    padding: 20px 18px 24px;
+    padding: 24px 18px;
     text-align: center;
     color: #8798a9;
     font-size: 13px;
-    border-bottom: none;
-}
-
-.history-empty span {
-    display: block;
 }
 
 .empty-icon {
-    display: block;
-    width: 26px;
-    height: 26px;
-    margin: 0 auto 6px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 6px;
     color: #9aa9b8;
-}
-
-.empty-icon svg {
-    width: 100%;
-    height: 100%;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
 }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 760px) {
-    .container {
-        width: min(560px, calc(100% - 24px));
-        margin-top: 18px;
-    }
-
     .dashboard {
         grid-template-columns: 1fr;
-        gap: 12px;
-    }
-
-    .card {
-        min-height: 100px;
-    }
-
-    .topbar {
-        padding: 14px 18px;
-        border-radius: 0 0 14px 14px;
-    }
-
-    .brand-title {
-        font-size: 21px;
-    }
-
-    .header-tools {
-        gap: 10px;
     }
 
     .current-time {
         display: none;
     }
 
-    .history-heading h2 {
-        font-size: 18px;
+    .topbar {
+        padding: 14px 18px;
     }
 
-    .device-title {
-        margin-top: 16px;
-    }
-}
-
-@media (max-width: 420px) {
-    .card {
-        padding: 14px;
-    }
-
-    .card h3 {
-        font-size: 11px;
-    }
-
-    .water-value {
-        font-size: 24px;
-    }
-
-    .gauge {
-        width: 64px;
-        height: 64px;
-    }
-
-    .gauge::before {
-        inset: 7px;
-    }
-
-    .history-table th,
-    .history-table td {
-        padding: 10px 9px;
-        font-size: 10px;
+    .brand-title {
+        font-size: 20px;
     }
 }
